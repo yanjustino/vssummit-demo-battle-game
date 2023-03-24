@@ -1,0 +1,75 @@
+@baseUrl = http://localhost:5161
+
+# @name Subscription
+# Serviço para gerar um Id de subscrição
+POST {{baseUrl}}/channel/subscribe HTTP/1.1
+
+###
+
+# @name CreateNewCharacterWarrior
+# Serviço para criar novo personagem
+POST {{baseUrl}}/character HTTP/1.1
+Content-Type: application/json
+
+{
+  "subscriptionKey": "{{Subscription.response.body.subscription}}",
+  "name": "player_warrior",
+  "jobClassName": "Warrior"
+}
+
+###
+
+# @name CreateNewCharacterMage
+# Serviço para criar novo personagem
+POST {{baseUrl}}/character HTTP/1.1
+Content-Type: application/json
+
+{
+  "subscriptionKey": "{{Subscription.response.body.subscription}}",
+  "name": "player_mage",
+  "jobClassName": "Mage"
+}
+
+###
+
+# @name CreateNewCharacterThief
+# Serviço para criar novo personagem
+POST {{baseUrl}}/character HTTP/1.1
+Content-Type: application/json
+
+{
+  "subscriptionKey": "{{Subscription.response.body.subscription}}",
+  "name": "player_thief",
+  "jobClassName": "Thief"
+}
+
+###
+
+# @name GetCharacterByName
+# Serviço para recuperar detalhes de um personagem
+GET {{baseUrl}}/character/{{CreateNewCharacterWarrior.request.body.name}}
+
+###
+
+# @name GetAllCharacter
+# Serviço para recuperar todos os personagens
+GET {{baseUrl}}/character
+
+###
+
+# @name CreateNewMatch
+# Serviço para criar uma nova partida entre personagens
+POST {{baseUrl}}/match HTTP/1.1
+Content-Type: application/json
+
+{
+  "subscriptionKey": "{{Subscription.response.body.subscription}}",
+  "firstPlayer": "{{CreateNewCharacterMage.request.body.name}}",
+  "secondPlayer": "{{CreateNewCharacterWarrior.request.body.name}}"
+}
+
+###
+
+# @name SubscriptionEvents
+# Serviço para recuperar eventos por subscription
+GET {{baseUrl}}/channel/{{Subscription.response.body.subscription}}/events HTTP/1.1

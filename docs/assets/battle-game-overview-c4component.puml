@@ -1,0 +1,52 @@
+@startuml battle-game-overview-c4component
+!include ../.c4s/C4_Component.puml
+
+AddElementTag("microservice", $bgColor=#f4f4f4, $fontColor=#000000, $borderColor=#000000, $shadowing="False", $shape=EightSidedShape())
+
+UpdateElementStyle("person", $bgColor=#000000, $fontColor=#000000, $borderColor=#00000000, $shadowing="False")
+UpdateElementStyle("container", $bgColor=#ffffff, $fontColor=#000000, $borderColor=#000000, $shadowing="False", $shape=RoundedBoxShape())
+UpdateElementStyle("component", $bgColor=#ffffff, $fontColor=#000000, $borderColor=#000000, $shadowing="False", $shape=RoundedBoxShape())
+UpdateElementStyle("external_system", $bgColor=#f4f4f4, $fontColor=#000000, $borderColor=#000000, $shadowing="False", $shape=RoundedBoxShape())
+
+SHOW_PERSON_PORTRAIT()
+LAYOUT_TOP_DOWN()
+
+title Battle Game Overview
+
+Person(player, "Player", "")
+Container(spa, "Client HTTP", "Spa:Browser", "")
+
+Container_Boundary(ApplicationBoundary, "Application") {
+    Component(Api.Controllers.ChannelController, "Channel Controller", "dotnet", "API para pub/sub")
+    Component(Api.Controllers.CharacterController, "Character Controller", "dotnet", "API de personagens")
+    Component(Api.Controllers.JobClassController, "Job Class Controller", "dotnet", "API de profissões")
+    Component(Api.Controllers.MatchController, "Match Controller", "dotnet", "API de partidas")
+}
+
+
+Container_Boundary(DomainBoundary, "Domain") {
+    Component(Domain.UseCases.OnCreateNewCharacter, "On Create New Character", "Use case", "")
+    Component(Domain.UseCases.OnStartingNewMatch, "On Starting New Match", "Use case", "")
+    Component(Domain.UseCases.Adapters.MessageBroker.IPublisher, " Publisher", "Kafka", "producer adapter")
+    Component(Domain.UseCases.Adapters.MessageBroker.ISubscriber, " Subscriber", "kafka", "consumer adapter")
+}
+
+ContainerQueue(Infrastructure.MessageBroker.EventDriven.MessagingQueue, "Messaging Queue", "Queue:In memory", "Messaging Queue")
+ContainerDb(Domain.UseCases.Adapters.Repositories.ICharacterRepository, " Character Repository", "Database:In memory", " Character Repository")
+ContainerDb(Domain.UseCases.Adapters.Queries.ICharacterQueryable, " Character Queryable", "Database:In memory", " Character Queryable")
+
+Rel(player, spa, "use")
+Rel(spa, Api.Controllers.CharacterController, "gerenciar personagens")
+Rel_L(spa, Api.Controllers.ChannelController, "subscribe")
+Rel(spa, Api.Controllers.MatchController, "iniciar uma partida")
+Rel(spa, Api.Controllers.JobClassController, "recuperar profissões")
+Rel(Api.Controllers.ChannelController, Domain.UseCases.Adapters.MessageBroker.ISubscriber, "subscribe")
+Rel(Api.Controllers.CharacterController, Domain.UseCases.OnCreateNewCharacter, "command")
+Rel(Api.Controllers.MatchController, Domain.UseCases.OnStartingNewMatch, "command")
+Rel_D(Domain.UseCases.OnCreateNewCharacter, Domain.UseCases.Adapters.MessageBroker.IPublisher, "publish")
+Rel_R(Domain.UseCases.OnCreateNewCharacter, Domain.UseCases.Adapters.Repositories.ICharacterRepository, "write")
+Rel_L(Domain.UseCases.OnStartingNewMatch, Domain.UseCases.Adapters.MessageBroker.IPublisher, "publish")
+Rel_U(Api.Controllers.CharacterController, Domain.UseCases.Adapters.Queries.ICharacterQueryable, "read")
+Rel_Back(Domain.UseCases.Adapters.MessageBroker.ISubscriber, Infrastructure.MessageBroker.EventDriven.MessagingQueue, "notify")
+Rel_L(Domain.UseCases.Adapters.MessageBroker.IPublisher, Infrastructure.MessageBroker.EventDriven.MessagingQueue, "publish")
+@enduml

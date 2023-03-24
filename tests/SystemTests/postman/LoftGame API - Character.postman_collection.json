@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "a641454a-774c-47ff-a165-9d36c5d2e8f8",
+		"name": "LoftGame API - Character",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Subscription",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"SUBSCRIPTION\", jsonData.subscription);",
+							"    pm.expect(jsonData.subscription).to.not.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/channel/subscribe",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"channel",
+						"subscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Character Warrior",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"",
+							"    var req = pm.request.body.toJSON();",
+							"    var json = JSON.parse(req.raw);",
+							"    pm.environment.set(\"WARRIOR\", json.name);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"subscriptionKey\": \"{{SUBSCRIPTION}}\",\n  \"name\": \"player_{{$randomWord}}\",\n  \"jobClassName\": \"Warrior\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/character",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"character"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Character Mage",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"",
+							"    var req = pm.request.body.toJSON();",
+							"    var json = JSON.parse(req.raw);",
+							"    pm.environment.set(\"MAGE\", json.name);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"subscriptionKey\": \"{{SUBSCRIPTION}}\",\n  \"name\": \"player_{{$randomWord}}\",\n  \"jobClassName\": \"Mage\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/character",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"character"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Character Thief",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"",
+							"    var req = pm.request.body.toJSON();",
+							"    var json = JSON.parse(req.raw);",
+							"    pm.environment.set(\"THIEF\", json.name);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"subscriptionKey\": \"{{SUBSCRIPTION}}\",\n  \"name\": \"player_{{$randomWord}}\",\n  \"jobClassName\": \"Thief\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/character",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"character"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Characters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/character",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"character"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Character By Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/character/player_mage",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"character",
+						"player_mage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Characters Paginate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/character/paginate?page=0&size=100",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"character",
+						"paginate"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Match",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"subscriptionKey\": \"{{SUBSCRIPTION}}\",\n  \"firstPlayer\": \"{{WARRIOR}}\",\n  \"secondPlayer\": \"{{MAGE}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/match",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"match"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "WARRIOR",
+			"value": ""
+		},
+		{
+			"key": "MAGE",
+			"value": ""
+		},
+		{
+			"key": "THIEF",
+			"value": ""
+		}
+	]
+}

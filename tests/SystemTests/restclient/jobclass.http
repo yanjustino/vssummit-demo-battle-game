@@ -1,0 +1,7 @@
+@baseUrl = http://localhost:5161
+
+# @name GetDefaultJobClasses
+# Serviço para gerar um Id de subscrição
+GET {{baseUrl}}/jobclass HTTP/1.1
+
+###

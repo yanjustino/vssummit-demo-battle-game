@@ -1,0 +1,28 @@
+{
+	"info": {
+		"_postman_id": "b1cae7c3-f0f9-40fb-918d-ef73cc30c032",
+		"name": "LoftGame API - Subscription",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Consume Subscription Events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/channel/{{SUBSCRIPTION}}/events",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"channel",
+						"{{SUBSCRIPTION}}",
+						"events"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
